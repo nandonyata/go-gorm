@@ -5,9 +5,20 @@ This is my second GOLANG project, i made this project by using :
 - POSTGRES
 
 ### How to run :
-- migrate :
-```go run migrate/migrate.go```
-- run compile daemon :
-```CompileDaemon -command="./go-gorm"```
+- create a .env file : 
 
+```
+PORT=3000
+DB_URL="host=localhost user= password= dbname=go-gorm port=5432"
+```
+
+- migrate :
+```
+go run migrate/migrate.go
+```
+
+- run compile daemon :
+```
+CompileDaemon -command="./go-gorm"
+```
 you're all set ;D
