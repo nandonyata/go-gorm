@@ -17,6 +17,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/users", controllers.CreateUser)
+	r.GET("/users", controllers.GetUsers)
 
 	r.Run()
 }

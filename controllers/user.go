@@ -35,3 +35,18 @@ func CreateUser(c *gin.Context) {
 		"user": newUser,
 	})
 }
+
+func GetUsers(c *gin.Context) {
+	var users []model.User
+	result := db.DB.Find(&users)
+
+	if result.Error != nil {
+		c.Status(400)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"code": 200,
+		"user": users,
+	})
+}
