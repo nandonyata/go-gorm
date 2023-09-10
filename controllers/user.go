@@ -130,3 +130,40 @@ func DeleteUser(c *gin.Context) {
 		"message": "Success delete user",
 	})
 }
+
+func Login(c *gin.Context) {
+	var dataFromBody struct{
+		Email string
+		Password string
+	}
+	c.Bind(&dataFromBody)
+
+	// find user
+	var user model.User
+	db.DB.First(&user, "email = ?", dataFromBody.Email)
+
+	// err if not found
+	if user.ID == 0 {
+		c.JSON(404, gin.H{
+			"code": 404,
+			"message": "Incorrect email/password",
+		})
+		return
+	}
+
+	// check if password correct
+	compare := helpers.ComparePassword([]byte(user.Password), []byte(dataFromBody.Password))
+
+	if !compare {
+		c.JSON(404, gin.H{
+			"code": 404,
+			"message": "Incorrect email/password",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"code": 200,
+		"user": user,
+	})
+}
