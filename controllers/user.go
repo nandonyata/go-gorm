@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"go-gorm/db"
+	"go-gorm/helpers"
 	model "go-gorm/models"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func CreateUser(c *gin.Context) {
 	var dataFromBody struct{
 		Name string
 		Email string
+		Password string
 	}
 
 	c.Bind(&dataFromBody)
@@ -19,6 +21,7 @@ func CreateUser(c *gin.Context) {
 	newUser := model.User{
 		Name: dataFromBody.Name, 
 		Email: dataFromBody.Email,
+		Password: helpers.HashPassword([]byte(dataFromBody.Password)),
 	}
 
 	// create
@@ -76,6 +79,7 @@ func UpdateUser(c *gin.Context) {
 	var dataFromBody struct{
 		Name string
 		Email string
+		Password string
 	}
 	c.Bind(&dataFromBody)
 
@@ -96,6 +100,7 @@ func UpdateUser(c *gin.Context) {
 	db.DB.Model(&user).Updates(model.User{
 		Name: dataFromBody.Name,
 		Email: dataFromBody.Email,
+		Password: helpers.HashPassword([]byte(dataFromBody.Password)),
 	})
 	
 	c.JSON(200, gin.H{
