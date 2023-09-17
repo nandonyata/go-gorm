@@ -10,6 +10,7 @@ This is my second GOLANG project, i made this project by using :
 ```
 PORT=3000
 DB_URL="host=localhost user= password= dbname=go-gorm port=5432"
+JWT_SECRET="skmeasionrs1391-3ns"
 ```
 
 - migrate :

@@ -162,8 +162,17 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// sign jwt token
+	newToken := helpers.SignToken(user.ID)
+
+	// response
+	response := model.LoginResponse{
+		User: user,
+		AccessToken: newToken,
+	}
+
 	c.JSON(200, gin.H{
 		"code": 200,
-		"user": user,
+		"response": response,
 	})
 }
