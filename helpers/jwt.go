@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -19,4 +21,27 @@ func SignToken(id uint) string {
 	}
 
 	return tokenString
+}
+
+func VerifyToken(token string) (jwt.MapClaims, error) {
+	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+
+	if !ok || !parsedToken.Valid {
+		return nil, errors.New("JWT ERROR")
+	}
+
+	return claims, nil
 }
