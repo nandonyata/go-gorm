@@ -21,5 +21,9 @@ go run migrate/migrate.go
 - run compile daemon :
 ```
 CompileDaemon -command="./go-gorm"
+
+OR
+
+go run main.go
 ```
 you're all set ;D

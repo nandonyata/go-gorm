@@ -8,6 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type LoginResponse struct {
+	User model.User
+	AccessToken string
+}
+
 func CreateUser(c *gin.Context) {
 	// get data from req.body
 	var dataFromBody struct{
@@ -17,6 +22,17 @@ func CreateUser(c *gin.Context) {
 	}
 
 	c.Bind(&dataFromBody)
+
+	// check unique email, throw error if email already taken
+	var findUser model.User
+	db.DB.Where("email = ?", dataFromBody.Email).First(&findUser)
+
+	if findUser.ID != 0 {
+		c.AbortWithStatusJSON(400, gin.H{
+			"code": 400,
+			"message": "Email already taken",
+		})
+	}
 
 	newUser := model.User{
 		Name: dataFromBody.Name, 
@@ -166,7 +182,7 @@ func Login(c *gin.Context) {
 	newToken := helpers.SignToken(user.ID)
 
 	// response
-	response := model.LoginResponse{
+	response := LoginResponse{
 		User: user,
 		AccessToken: newToken,
 	}

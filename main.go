@@ -25,5 +25,8 @@ func main() {
 	r.PATCH("/users/:id", controllers.UpdateUser)
 	r.DELETE("/users/:id", middlewares.Authentication(), controllers.DeleteUser)
 
+	r.POST("/movie", middlewares.Authentication(), controllers.AddMovie)
+	r.GET("/movie/:userId", middlewares.Authentication(), controllers.GetMovies)
+
 	r.Run()
 }
